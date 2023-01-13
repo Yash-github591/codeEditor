@@ -6,8 +6,9 @@ import "codemirror/mode/javascript/javascript";
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import "codemirror/mode/clike/clike";
+import ACTIONS from "../Actions";
 
-function Editor() {
+function Editor({ socketRef, roomId, onCodeChange }) {
   const editorRef = useRef(null);
 
   useEffect(() => {
@@ -22,16 +23,51 @@ function Editor() {
           lineNumbers: true,
         }
       );
+
+      // adding event Listeners to editorRef
+      editorRef.current.on("change", (instance, changes) => {
+        // instance => current instance of the editor
+        // changes => changes happened to the editor
+
+        const { origin } = changes;
+        const code = instance.getValue();
+
+        onCodeChange(code);
+
+        if (origin !== "setValue") {
+          socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+            roomId,
+            code,
+          });
+        }
+      });
+
+      socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+        if (code != null) {
+          // inserting the code inside the editor
+          editorRef.current.setValue(code);
+        }
+      });
     }
 
     init();
   }, []);
 
-  return (
-    <div>
-      <textarea id="realtimeEditor"></textarea>
-    </div>
-  );
+  useEffect(() => {
+    if (socketRef.current) {
+      socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+        if (code != null) {
+          editorRef.current.setValue(code);
+        }
+      });
+    }
+
+    return () => {
+      socketRef.current.off(ACTIONS.CODE_CHANGE);
+    };
+  }, [socketRef.current]);
+
+  return <textarea id="realtimeEditor"></textarea>;
 }
 
 export default Editor;

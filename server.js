@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
     userSocketMap[socket.id] = data.username;
     socket.join(data.roomId);
     const clients = getAllConnectedClients(data.roomId); // get all connected client on a particular room id
-    console.log(clients);
+    // console.log(clients);
 
     clients.forEach(({ socketId }) => {
       io.to(socketId).emit(ACTIONS.JOINED, {
@@ -37,6 +37,16 @@ io.on("connection", (socket) => {
         socketId: socket.id,
       });
     });
+  });
+
+  socket.on(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
+    // io.to(roomId).emit(ACTIONS.CODE_CHANGE, { code }); // send the code to everyone in the roomId/socketId including the sender
+    socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code }); // send the code to everyone in the roomId/socketId except the sender
+  });
+
+  socket.on(ACTIONS.SYNC_CODE, ({ socketId, code }) => {
+    io.to(socketId).emit(ACTIONS.CODE_CHANGE, { code }); // send the code to everyone in the room including the sender
+    // socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code }); // send the code to everyone in the room except the sender
   });
 
   socket.on("disconnecting", () => {

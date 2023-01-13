@@ -123,7 +123,10 @@
 }
 
 .CodeMirror{
-  min-height: calc(100vh-20px);
+  min-height: 96vh;
+  /* max-height: 98vh;  */
+  /* height: calc(100vh-20px); */
+  /* min-height: calc(100vh-20px); */
   font-size: 18px;
   line-height: 1.6;
   padding-top: 20px;
