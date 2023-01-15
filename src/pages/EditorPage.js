@@ -12,6 +12,7 @@ import {
 import { toast } from "react-hot-toast";
 
 function EditorPage() {
+  const [micOn, setMicOn] = useState(false);
   const [clients, setClients] = useState([]);
 
   const socketRef = useRef(null);
@@ -93,6 +94,14 @@ function EditorPage() {
 
   if (!location.state) {
     return <Navigate to="/" />;
+  }
+
+  function toggleMic() {
+    if (micOn) {
+      setMicOn(false);
+    } else {
+      setMicOn(true);
+    }
   }
 
   return (
