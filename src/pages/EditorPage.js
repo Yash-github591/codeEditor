@@ -12,6 +12,7 @@ import {
 import { toast } from "react-hot-toast";
 
 function EditorPage() {
+  const [micOn, setMicOn] = useState(false);
   const [clients, setClients] = useState([]);
 
   const socketRef = useRef(null);
@@ -95,6 +96,14 @@ function EditorPage() {
     return <Navigate to="/" />;
   }
 
+  function toggleMic() {
+    if (micOn) {
+      setMicOn(false);
+    } else {
+      setMicOn(true);
+    }
+  }
+
   return (
     <div className="mainWrap">
       <div className="aside">
@@ -115,6 +124,32 @@ function EditorPage() {
             ))}
           </div>
         </div>
+
+        <div className="micButton">
+          {micOn && (
+            <img
+              style={{
+                height: "80px",
+                borderRadius: "40px",
+                marginBottom: "20px",
+              }}
+              src="/onMic.jpeg"
+              onClick={toggleMic}
+            />
+          )}
+          {!micOn && (
+            <img
+              style={{
+                height: "80px",
+                borderRadius: "40px",
+                marginBottom: "20px",
+              }}
+              src="/offMic.jpeg"
+              onClick={toggleMic}
+            />
+          )}
+        </div>
+
         <button className="btn copyBtn" onClick={copyRoomId}>
           Copy Room Id
         </button>

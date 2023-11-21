@@ -12,6 +12,7 @@
     "react-avatar": "^5.0.3",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.7.1",
     "react-router-dom": "^6.6.2",
     "react-scripts": "5.0.1",
     "socket.io": "^4.5.4",
@@ -21,8 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "server:dev":"nodemon server.js",
-    "server:prod":"node server.js",
+    "server:dev": "nodemon server.js",
+    "server:prod": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
